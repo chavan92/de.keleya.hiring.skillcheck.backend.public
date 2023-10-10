@@ -1,789 +1,690 @@
 {
-	"info": {
-		"_postman_id": "2cea11e6-4ded-4be1-bfae-4b955f5168c5",
-		"name": "Hiring Backend Test",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "As User",
-			"item": [
-				{
-					"name": "Find only current user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Value should be 3\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].id).to.eql(3);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Ignore search for other",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Value should be 3\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].id).to.eql(3);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user?id=2",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Fail get on other id",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 401\", function () {",
-									"    pm.response.to.have.status(401);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user/2",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get own user id",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user/3",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update own name",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Name is updated\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.name).to.eql('new name');",
-									"});",
-									"",
-									"pm.test(\"Updated At != Created At\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.updatedAt).to.not.eql(jsonData.createdAt);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 3,\n    \"name\": \"new name\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Authenticate",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has credentials\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.credentials).to.exist;",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user/authenticate",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"authenticate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has token\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.token).to.exist;",
-									"});",
-									"",
-									"pm.test(\"Is JWT token\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.token).to.contain('eyJ');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user/token",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Validate Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user/validate",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"validate"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{tokenUser}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "As Admin",
-			"item": [
-				{
-					"name": "Authenticate",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has credentials\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.credentials).to.exist;",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user/authenticate",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"authenticate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has token\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.token).to.exist;",
-									"});",
-									"",
-									"pm.test(\"Is JWT token\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.token).to.contain('eyJ');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user/token",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Validate Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user/validate",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"validate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Find all users",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Should return array of all user\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(Array.isArray(jsonData)).to.be.true;",
-									"    pm.expect(jsonData.length).to.gt(1);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Find all users containing ma in name",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Should return array of users\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(Array.isArray(jsonData)).to.be.true;",
-									"    pm.expect(jsonData.length).to.gt(1);",
-									"});",
-									"",
-									"pm.test(\"Names should contain 'ma'\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    for(var item of jsonData) {",
-									"        pm.expect(item.name).to.contain('ma')",
-									"    }",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user?name=ma",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "ma"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get specific user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 401\", function () {",
-									"    pm.response.to.have.status(401);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/user/2",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create new user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"New User\",\n\t\"email\": \"newuser@fake-mail.com\",\n\t\"password\": \"password\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete that user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Name deleted\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.users.name).to.eql(\"(deleted)\");",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 6\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update a user name",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Name is updated\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.name).to.eql('new name');",
-									"});",
-									"",
-									"pm.test(\"Updated At != Created At\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.updatedAt).to.not.eql(jsonData.createdAt);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"name\": \"new name\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/user",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{tokenAdmin}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "baseurl",
-			"value": "http://localhost:3000"
-		},
-		{
-			"key": "tokenUser",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbWFVc2VyQGZha2UtbWFpbC5jb20iLCJpZCI6MywiaWF0IjoxNjM3MjM1ODI5LCJleHAiOjE2Njg3OTM0Mjl9.gZJE2WIXw9Rbwc4Eouv5hOwDrfzf6bY-wx3fYbhHyMA"
-		},
-		{
-			"key": "tokenAdmin",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGZha2UtbWFpbC5jb20iLCJpZCI6NCwiaWF0IjoxNjM3MzM3ODg0LCJleHAiOjE2Njg4OTU0ODR9.b79XlIFEnTIE0A0RWJA2pK2atSb1bpRzkC0nNGzGIxQ"
-		}
-	]
+  "info": {
+    "_postman_id": "2cea11e6-4ded-4be1-bfae-4b955f5168c5",
+    "name": "Hiring Backend Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "As User",
+      "item": [
+        {
+          "name": "Find only current user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Value should be 23\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.eql(23);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user",
+              "host": ["{{baseurl}}"],
+              "path": ["user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ignore search for other",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Value should be 23\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.eql(23);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user?id=2",
+              "host": ["{{baseurl}}"],
+              "path": ["user"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fail get on other id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user/2",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get own user id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user/23",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "23"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update own name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Name is updated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.name).to.eql('new name');",
+                  "});",
+                  "",
+                  "pm.test(\"Updated At != Created At\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.updated_at).to.not.eql(jsonData.created_at);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 23,\n    \"name\": \"new name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user",
+              "host": ["{{baseurl}}"],
+              "path": ["user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authenticate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user/authenticate",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "authenticate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Has token\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.token).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Is JWT token\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.token).to.contain('eyJ');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user/token",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "token"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user/validate",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "validate"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{tokenUser}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        }
+      ]
+    },
+    {
+      "name": "As Admin",
+      "item": [
+        {
+          "name": "Authenticate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user/authenticate",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "authenticate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Has token\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.token).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Is JWT token\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.token).to.contain('eyJ');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"mamaUser@fake-mail.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user/token",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "token"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user/validate",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "validate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find all users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Should return array of all user\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+                  "    pm.expect(jsonData.length).to.gt(1);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user",
+              "host": ["{{baseurl}}"],
+              "path": ["user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find all users containing ma in name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Should return array of users\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+                  "    pm.expect(jsonData.length).to.gt(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Names should contain 'ma'\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    for(var item of jsonData) {",
+                  "        pm.expect(item.name).to.contain('ma')",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user?name=ma",
+              "host": ["{{baseurl}}"],
+              "path": ["user"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "ma"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get specific user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/user/2",
+              "host": ["{{baseurl}}"],
+              "path": ["user", "2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create new user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"New User\",\n\t\"email\": \"mamaUser26@fake-mail.com\",\n\t\"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user",
+              "host": ["{{baseurl}}"],
+              "path": ["user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete that user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Name deleted\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.name).to.eql(\"(deleted)\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 6\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user",
+              "host": ["{{baseurl}}"],
+              "path": ["user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a user name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Name is updated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.name).to.eql('new name');",
+                  "});",
+                  "",
+                  "pm.test(\"Updated At != Created At\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.updated_at).to.not.eql(jsonData.created_at);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 17,\n    \"name\": \"new name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/user",
+              "host": ["{{baseurl}}"],
+              "path": ["user"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{tokenAdmin}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseurl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "tokenUser",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImlzX2FkbWluIjpmYWxzZSwiaWF0IjoxNjk2ODc0NDExLCJleHAiOjE3Mjg0MzIwMTF9.O5ktjnxppZ0dHvzKw-NBW_ruOQDE6ssYLSBSKDZt4jY"
+    },
+    {
+      "key": "tokenAdmin",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlzX2FkbWluIjp0cnVlLCJpYXQiOjE2OTY4NzQzMTAsImV4cCI6MTcyODQzMTkxMH0.v1tuaAfHt3TXekrnKKxr9XSQVW04m6IrSgrSfll_c6Y"
+    }
+  ]
 }
