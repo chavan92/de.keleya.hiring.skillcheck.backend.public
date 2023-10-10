@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "dotenv -e .env.test -- jest --config ./test/jest-e2e.json",
+    "migrate:test": "PRISMA_MIGRATIONS_OUTPUT_PATH=./migrations-test dotenv -e .env.test -- npx prisma migrate dev --schema ./prisma/test/schema.prisma"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -36,6 +37,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
+    "dotenv-cli": "^7.3.0",
     "joi": "^17.4.2",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
